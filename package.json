@@ -4,10 +4,12 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build": "ng build --configuration=production",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test",
-    "test:e2e": "playwright test",
+    "test": "ng test --watch=false --browsers=ChromeHeadless",
+    "e2e": "npx playwright test",
+    "e2e:headed": "npx playwright test --headed",
+    "e2e:install": "npx playwright install --with-deps",
     "serve:ssr:WalkingSkeletonFrontend": "node dist/walking-skeleton-frontend/server/server.mjs"
   },
   "private": true,
