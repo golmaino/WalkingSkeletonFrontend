@@ -11,6 +11,5 @@ test('should allow user to submit a moving request', async ({ page }) => {
 
   await page.click('button[type="submit"]');
 
-
   await expect(page.locator('.success-message')).toHaveText('Your moving request has been submitted!');
 });
