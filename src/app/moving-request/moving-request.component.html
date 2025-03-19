@@ -1,28 +1,24 @@
-<div class="move-request-container">
-  <h2>Request a Move</h2>
+<form [formGroup]="moveRequestForm" (ngSubmit)="submitMoveRequest()">
+  <label for="firstName">First Name:</label>
+  <input id="firstName" formControlName="firstName">
 
-  <form (ngSubmit)="submitMoveRequest()">
-    <label for="firstName">First Name:</label>
-    <input id="firstName" type="text" [(ngModel)]="moveRequest.firstName" name="firstName" required>
+  <label for="lastName">Last Name:</label>
+  <input id="lastName" formControlName="lastName">
 
-    <label for="lastName">Last Name:</label>
-    <input id="lastName" type="text" [(ngModel)]="moveRequest.lastName" name="lastName" required>
+  <label for="oldAddress">Old Address:</label>
+  <input id="oldAddress" formControlName="oldAddress">
 
-    <label for="oldAddress">Old Address:</label>
-    <input id="oldAddress" type="text" [(ngModel)]="moveRequest.oldAddress" name="oldAddress" required>
+  <label for="newAddress">New Address:</label>
+  <input id="newAddress" formControlName="newAddress">
 
-    <label for="newAddress">New Address:</label>
-    <input id="newAddress" type="text" [(ngModel)]="moveRequest.newAddress" name="newAddress" required>
+  <label for="movingDate">Moving Date:</label>
+  <input id="movingDate" type="date" formControlName="movingDate">
 
-    <label for="movingDate">Moving Date:</label>
-    <input id="movingDate" type="date" [(ngModel)]="moveRequest.movingDate" name="movingDate" required>
+  <button type="submit" [disabled]="moveRequestForm.invalid">Submit</button>
+</form>
 
-    <p class="success-message" *ngIf="requestSubmitted">Your moving request has been submitted!</p>
-
-    <button type="submit">Submit</button>
-  </form>
-
-  <button routerLink="/" class="home-button">Back to Home</button>
+<div *ngIf="requestSubmitted" class="success-message">
+  <h3>Move request successfully created!</h3>
 </div>
 
-
+<button routerLink="/" class="home-button">Back to Home</button>

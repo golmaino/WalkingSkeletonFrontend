@@ -1,56 +1,44 @@
 import { Component } from '@angular/core';
-import {Router, RouterLink} from '@angular/router';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MovingRequestService } from './moving-request.service';
 import { CommonModule } from '@angular/common';
-import { MoveRequest } from './moving-request.model';
+import { HttpClientModule } from '@angular/common/http';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-move-request',
   standalone: true,
   templateUrl: './moving-request.component.html',
   styleUrls: ['./moving-request.component.css'],
-  imports: [FormsModule, CommonModule, RouterLink]
+  imports: [CommonModule, ReactiveFormsModule, HttpClientModule, RouterLink]
 })
 export class MoveRequestComponent {
-  moveRequest: MoveRequest = {
-    firstName: '',
-    lastName: '',
-    oldAddress: '',
-    newAddress: '',
-    movingDate: ''
-  };
-
-  constructor(private router: Router) {}
+  moveRequestForm: FormGroup;
   requestSubmitted = false;
 
+  constructor(private fb: FormBuilder, private moveRequestService: MovingRequestService) {
+    this.moveRequestForm = this.fb.group({
+      firstName: ['', Validators.required],
+      lastName: ['', Validators.required],
+      oldAddress: ['', Validators.required],
+      newAddress: ['', Validators.required],
+      movingDate: ['', Validators.required]
+    });
+  }
+
   submitMoveRequest(): void {
-    if (!this.moveRequest.firstName || !this.moveRequest.lastName ||
-      !this.moveRequest.oldAddress || !this.moveRequest.newAddress ||
-      !this.moveRequest.movingDate) {
-      console.error('All fields must be filled out.');
-      return;
+    if (this.moveRequestForm.valid) {
+      this.moveRequestService.createMoveRequest(this.moveRequestForm.value).subscribe({
+        next: (response) => {
+          console.log('Move request created:', response);
+          this.requestSubmitted = true;
+          alert("Move request successfully created!");
+          this.moveRequestForm.reset();
+        },
+        error: (error) => {
+          console.error('Error creating move request:', error);
+        }
+      });
     }
-
-    if (typeof window !== 'undefined' && window.localStorage) {
-      localStorage.setItem('moveRequest', JSON.stringify(this.moveRequest));
-      console.log('Move request submitted and saved:', this.moveRequest);
-    }
-
-    this.requestSubmitted = true;
-    this.resetForm();
-  }
-
-  resetForm(): void {
-    this.moveRequest = {
-      firstName: '',
-      lastName: '',
-      oldAddress: '',
-      newAddress: '',
-      movingDate: ''
-    };
-  }
-
-  goToHome(): void {
-    this.router.navigate(['/']);
   }
 }

@@ -1,49 +1,52 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { MoveRequestComponent } from './moving-request.component';
-import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
-import { ActivatedRoute } from '@angular/router';
+import { Component } from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MovingRequestService } from './moving-request.service';
+import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
+import { Router, RouterLink } from '@angular/router'; // 🔥 Router importieren!
 
-describe('MoveRequestComponent', () => {
-  let component: MoveRequestComponent;
-  let fixture: ComponentFixture<MoveRequestComponent>;
+@Component({
+  selector: 'app-move-request',
+  standalone: true,
+  templateUrl: './moving-request.component.html',
+  styleUrls: ['./moving-request.component.css'],
+  imports: [CommonModule, ReactiveFormsModule, HttpClientModule, RouterLink]
+})
+export class MoveRequestComponent {
+  moveRequestForm: FormGroup;
+  requestSubmitted = false;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [FormsModule, MoveRequestComponent],
-      providers: [
-        { provide: Router, useValue: { navigate: jasmine.createSpy('navigate') } },
-        { provide: ActivatedRoute, useValue: {} } // ✅ Fix für "No provider for ActivatedRoute!"
-      ]
-    }).compileComponents();
-  });
+  constructor(
+    private fb: FormBuilder,
+    private moveRequestService: MovingRequestService,
+    private router: Router
+  ) {
+    this.moveRequestForm = this.fb.group({
+      firstName: ['', Validators.required],
+      lastName: ['', Validators.required],
+      oldAddress: ['', Validators.required],
+      newAddress: ['', Validators.required],
+      movingDate: ['', Validators.required]
+    });
+  }
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(MoveRequestComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+  submitMoveRequest(): void {
+    if (this.moveRequestForm.valid) {
+      this.moveRequestService.createMoveRequest(this.moveRequestForm.value).subscribe({
+        next: (response) => {
+          console.log('Move request created:', response);
+          this.requestSubmitted = true;
+          alert("Move request successfully created!");
+          this.moveRequestForm.reset();
+        },
+        error: (error) => {
+          console.error('Error creating move request:', error);
+        }
+      });
+    }
+  }
 
-  it('should create the component', () => {
-    expect(component).toBeTruthy();
-  });
-
-  it('should have default move request attributes', () => {
-    expect(component.moveRequest.firstName).toBeDefined();
-    expect(component.moveRequest.lastName).toBeDefined();
-    expect(component.moveRequest.oldAddress).toBeDefined();
-    expect(component.moveRequest.newAddress).toBeDefined();
-    expect(component.moveRequest.movingDate).toBeDefined();
-  });
-
-  it('should not submit move request if fields are empty', () => {
-    spyOn(console, 'error');
-    component.submitMoveRequest();
-    expect(console.error).toHaveBeenCalledWith('All fields must be filled out.');
-  });
-
-  it('should navigate to home when goToHome is called', () => {
-    component.goToHome();
-    expect((component as any).router.navigate).toHaveBeenCalledWith(['/']);
-  });
-});
+  goToHome(): void {
+    this.router.navigate(['/']);
+  }
+}
