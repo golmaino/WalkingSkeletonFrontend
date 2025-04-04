@@ -15,14 +15,7 @@
     "lint": "eslint src --ext .ts,.html",
     "lint:fix": "eslint src --ext .ts,.html --fix",
     "format": "prettier --write",
-    "format:check": "prettier --check",
-    "prepare": "husky install"
-  },
-  "lint-staged": {
-    "*.{ts,html,css,scss}": [
-      "eslint --fix",
-      "prettier --write"
-    ]
+    "format:check": "prettier --check"
   },
   "private": true,
   "dependencies": {
