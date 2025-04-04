@@ -1,18 +1,18 @@
 <form [formGroup]="moveRequestForm" (ngSubmit)="submitMoveRequest()">
   <label for="firstName">First Name:</label>
-  <input id="firstName" formControlName="firstName">
+  <input id="firstName" formControlName="firstName" />
 
   <label for="lastName">Last Name:</label>
-  <input id="lastName" formControlName="lastName">
+  <input id="lastName" formControlName="lastName" />
 
   <label for="oldAddress">Old Address:</label>
-  <input id="oldAddress" formControlName="oldAddress">
+  <input id="oldAddress" formControlName="oldAddress" />
 
   <label for="newAddress">New Address:</label>
-  <input id="newAddress" formControlName="newAddress">
+  <input id="newAddress" formControlName="newAddress" />
 
   <label for="movingDate">Moving Date:</label>
-  <input id="movingDate" type="date" formControlName="movingDate">
+  <input id="movingDate" type="date" formControlName="movingDate" />
 
   <button type="submit" [disabled]="moveRequestForm.invalid">Submit</button>
 </form>

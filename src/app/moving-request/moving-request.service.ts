@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { MoveRequest } from '../moving-request/moving-request.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class MovingRequestService {
   private apiUrl = 'http://localhost:8080/api/moving-requests';
