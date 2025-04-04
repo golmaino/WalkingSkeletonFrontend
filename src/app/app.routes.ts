@@ -4,5 +4,5 @@ import { MoveRequestComponent } from './moving-request/moving-request.component'
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
-  { path: 'moving', component: MoveRequestComponent }
+  { path: 'moving', component: MoveRequestComponent },
 ];
