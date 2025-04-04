@@ -21,8 +21,6 @@ export class MoveRequestComponent {
   moveRequestForm: FormGroup;
   requestSubmitted = false;
 
-
-
   constructor(
     private fb: FormBuilder,
     private moveRequestService: MovingRequestService,
